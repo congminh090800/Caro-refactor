@@ -1,0 +1,19 @@
+ol, ul {
+    padding-left: 30px;
+}
+.game {
+    display: flex;
+    flex-direction: row;
+}
+  
+.game-info {
+    margin-left: 20px;
+}
+
+.m-r-5 {
+    margin-right: 5px;
+}
+
+.current-move {
+    font-weight: bolder;
+}
