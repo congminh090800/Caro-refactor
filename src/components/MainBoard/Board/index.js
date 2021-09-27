@@ -13,13 +13,12 @@ class Board extends React.Component {
     return this.props.line && this.props.line.indexOf(i) >= 0;
   }
   render() {
-    const boardRow = 3;
-    const boardCol = 3;
+    const boardSize = this.props.size || 3;
     let squares = [];
-    for (let i = 0; i < boardRow; i++) {
+    for (let i = 0; i < boardSize; i++) {
       let row = [];
-      for (let j = 0; j < boardCol; j++) {
-        row.push(this.renderSquare(i * boardRow + j));
+      for (let j = 0; j < boardSize; j++) {
+        row.push(this.renderSquare(i * boardSize + j));
       }
       squares.push(<div key={i} className="board-row">{row}</div>);
     }

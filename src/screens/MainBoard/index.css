@@ -17,3 +17,8 @@ ol, ul {
 .current-move {
     font-weight: bolder;
 }
+
+.size-input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
