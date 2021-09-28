@@ -1,26 +1,45 @@
 export { calculateWinner }
 
-function calculateWinner(squares, x, y, size) {
-  if (x< 0|| y< 0 || squares.length === 0) {
-    return {
-      winner: null,
-      line: null,
-      isDraw: false,
+function calculateWinner(squares, size) {
+  let squares2d = chunkArray(squares, size);
+  let i,j;
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) {
+      if (squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j] && squares2d[i][j] === squares2d[i+2][j] && 
+        squares2d[i][j] === squares2d[i+3][j] &&squares2d[i][j] === squares2d[i+4][j]) {
+          return {
+            winner: squares2d[i][j],
+            line: getCol(i, j, size),
+            isDraw: false
+          }
+      }
+      if (squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j+1] && squares2d[i][j] === squares2d[i+2][j+2] && 
+        squares2d[i][j] === squares2d[i+3][j+3] &&squares2d[i][j] === squares2d[i+4][j+4]) {
+          return {
+            winner: squares2d[i][j],
+            line: getDiag(i, j, size),
+            isDraw: false
+          }
+      }
+      if (squares2d[i][j] && squares2d[i][j] === squares2d[i-1][j+1] && squares2d[i][j] === squares2d[i-2][j+2] && 
+        squares2d[i][j] === squares2d[i-3][j+3] &&squares2d[i][j] === squares2d[i-4][j+4]) {
+          return {
+            winner: squares2d[i][j],
+            line: getAntiDiag(i, j, size),
+            isDraw: false
+          }
+      }
+      if (squares2d[i][j] && squares2d[i][j] === squares2d[i][j+1] && squares2d[i][j] === squares2d[i][j+2] && 
+        squares2d[i][j] === squares2d[i][j+3] &&squares2d[i][j] === squares2d[i][j+4]) {
+          return {
+            winner: squares2d[i][j],
+            line: getRow(i, j, size),
+            isDraw: false
+          }
+      }
     }
   }
-  let squares2d = chunkArray(squares, size);
-  let surround = checkSurround(squares2d, x, y, size);
-  if (surround && surround.winner) {
-    return surround;
-  }
-  let beneath = checkBeneath(squares2d, x, y, size);
-  if (beneath && beneath.winner) {
-    return beneath;
-  }
-  let upon = checkUpon(squares2d, x, y, size);
-  if (upon && upon.winner) {
-    return upon;
-  }
+
   if (squares.filter(square => square).length === squares.length) {
       return {
           winner: null,
@@ -35,94 +54,45 @@ function calculateWinner(squares, x, y, size) {
   }
 }
 
-function checkSurround(squares2d, x, y, size) {
-  if (x-1>=0 && x+1<size && squares2d[x][y] && squares2d[x-1][y] === squares2d[x][y] && squares2d[x+1][y] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+y,x*size+y,(x+1)*size+y],
-      isDraw: false
-    }
-  } else if (y-1>=0 && y+1<size && squares2d[x][y] && squares2d[x][y-1] === squares2d[x][y] && squares2d[x][y+1] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [x*size+y-1,x*size+y,x*size+y+1],
-      isDraw: false
-    }
-  } else if (x-1>=0 && x+1<size && y-1>=0 && y+1<size && squares2d[x][y] && squares2d[x-1][y-1] === squares2d[x][y] && squares2d[x+1][y+1] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+(y-1),x*size+y,(x+1)*size+y+1],
-      isDraw: false
-    }
-  } else if (x-1>=0 && x+1<size && y-1>=0 && y+1<size && squares2d[x][y] && squares2d[x+1][y-1] === squares2d[x][y] && squares2d[x-1][y+1] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+y+1,x*size+y,(x+1)*size+(y-1)],
-      isDraw: false
-    }
+function getRow(x, y, size) {
+  let line = [];
+  for ( let i = y; i < y + 5; i++) {
+    line.push(x*size + i);
   }
-  return null;
+  return line;
 }
 
-function checkBeneath(squares2d, x, y, size) {
-  if (x+2 < size && squares2d[x][y] && squares2d[x+1][y] === squares2d[x][y] && squares2d[x+2][y] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      // line: [x*size+y+1,x*size+y,x*size+y+2],
-      line: [(x+1)*size+y,x*size+y,(x+2)*size+y],
-      isDraw: false
-    }
-  } else if (x+2<size && y+2<size && squares2d[x][y] && squares2d[x+1][y+1] === squares2d[x][y] && squares2d[x+2][y+2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x+1)*size+y+1,x*size+y,(x+2)*size+y+2],
-      isDraw: false
-    }
-  } else if (y+2<size && squares2d[x][y] && squares2d[x][y+1] === squares2d[x][y] && squares2d[x][y+2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [x*size+y+1,x*size+y,x*size+y+2],
-      // line: [(x+1)*size+y,x*size+y,(x+2)*size+y],
-      isDraw: false
-    }
-  } else if (x-2>=0 && y+2<size && squares2d[x][y] && squares2d[x-1][y+1] === squares2d[x][y] && squares2d[x-2][y+2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+(y+1),x*size+y,(x-2)*size+(y+2)],
-      isDraw: false
-    }
+function getDiag(x, y, size) {
+  let line = [];
+  let accum = x * size + y;
+  line.push(accum);
+  for ( let i = 1; i < 5; i++) {
+    accum = accum + size + 1;
+    line.push(accum);
   }
-  return null;
+  return line;
 }
 
-function checkUpon(squares2d, x, y, size) {
-  if (x-2>=0 && squares2d[x][y] && squares2d[x-1][y] === squares2d[x][y] && squares2d[x-2][y] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+y,x*size+y,(x-2)*size+y],
-      isDraw: false
-    }
-  } else if (x-2>=0 && y-2>=0 && squares2d[x][y] && squares2d[x-1][y-1] === squares2d[x][y] && squares2d[x-2][y-2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x-1)*size+y-1,x*size+y,(x-2)*size+y-2],
-      isDraw: false
-    }
-  } else if (y-2>=0 && squares2d[x][y] && squares2d[x][y-1] === squares2d[x][y] && squares2d[x][y-2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      // line: [(x-1)*size+y,x*size+y,(x-2)*size+y],
-      line: [x*size+(y-1),x*size+y,x*size+(y-2)],
-      isDraw: false
-    }
-  } else if (x+2<size && y-2>=0 && squares2d[x][y] && squares2d[x+1][y-1] === squares2d[x][y] && squares2d[x+2][y-2] === squares2d[x][y]) {
-    return {
-      winner: squares2d[x][y],
-      line: [(x+1)*size+(y-1),x*size+y,(x+2)*size+(y-2)],
-      isDraw: false
-    }
+function getAntiDiag(x, y, size) {
+  let line = [];
+  let accum = x * size + y;
+  line.push(accum);
+  for ( let i = 1; i < 5; i++) {
+    accum = accum - (size -1);
+    line.push(accum);
   }
-  return null;
+  return line;
+}
+
+function getCol(x, y, size) {
+  let line = [];
+  let accum = x * size + y;
+  line.push(accum);
+  for ( let i = 1; i < 5; i++) {
+    accum = accum + size;
+    line.push(accum);
+  }
+  return line;
 }
 
 function chunkArray(myArray, chunk_size){

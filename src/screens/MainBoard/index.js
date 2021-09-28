@@ -21,18 +21,14 @@ const initialState = (size) => ({
 class Game extends React.Component {
   constructor(props) {
     super(props);
-    this.state = initialState(3);
+    this.state = initialState(5);
     this.handleChange = this.handleChange.bind(this);
   }
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[this.state.stepNumber];
     const squares = current.squares.slice();
-    const winRecheck = calculateWinner(squares, current.coord.Y -1, current.coord.X -1, this.state.size);
-    if (winRecheck.winner || winRecheck.isDraw) {
-      return;
-    }
-    const winInfo = calculateWinner(squares, parseInt(i/this.state.size), i%this.state.size, this.state.size);
+    const winInfo = calculateWinner(squares, this.state.size);
     if (winInfo.winner || squares[i] || winInfo.isDraw) {
       return;
     }
@@ -63,11 +59,11 @@ class Game extends React.Component {
     })
   }
   handleChange(event) {
-    let size = Number(event.target.value) || 3;
-    if (size < 3) {
-      size = 3;
+    let size = Number(event.target.value) || 5;
+    if (size < 5) {
+      size = 5;
     } else {
-      size = Math.min(10,size);
+      size = Math.min(50,size);
     }
     this.setState({
       ...initialState(size)
@@ -76,7 +72,7 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winInfo = calculateWinner(current.squares, current.coord.Y-1, current.coord.X-1, this.state.size);
+    const winInfo = calculateWinner(current.squares, this.state.size);
     const winner = winInfo.winner;
     let status;
     if (!winner && !winInfo.isDraw) {
@@ -112,7 +108,7 @@ class Game extends React.Component {
         <div className="size-input">
           <label>
             Change the size and restart:
-            <input type="number" id="size" name="size" min="3" max="10" value={this.state.size} onChange={this.handleChange}></input>
+            <input type="number" id="size" name="size" min="5" max="50" value={this.state.size} onChange={this.handleChange}></input>
           </label>
         </div>
         <div className="game">
