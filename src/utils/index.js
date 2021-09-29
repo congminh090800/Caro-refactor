@@ -5,7 +5,7 @@ function calculateWinner(squares, size) {
   let i,j;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
-      if (squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j] && squares2d[i][j] === squares2d[i+2][j] && 
+      if (i+4<size && squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j] && squares2d[i][j] === squares2d[i+2][j] && 
         squares2d[i][j] === squares2d[i+3][j] &&squares2d[i][j] === squares2d[i+4][j]) {
           return {
             winner: squares2d[i][j],
@@ -13,7 +13,7 @@ function calculateWinner(squares, size) {
             isDraw: false
           }
       }
-      if (squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j+1] && squares2d[i][j] === squares2d[i+2][j+2] && 
+      if (i+4<size && j+4<size && squares2d[i][j] && squares2d[i][j] === squares2d[i+1][j+1] && squares2d[i][j] === squares2d[i+2][j+2] && 
         squares2d[i][j] === squares2d[i+3][j+3] &&squares2d[i][j] === squares2d[i+4][j+4]) {
           return {
             winner: squares2d[i][j],
@@ -21,7 +21,7 @@ function calculateWinner(squares, size) {
             isDraw: false
           }
       }
-      if (squares2d[i][j] && squares2d[i][j] === squares2d[i-1][j+1] && squares2d[i][j] === squares2d[i-2][j+2] && 
+      if (i-4>=0 && j+4<size && squares2d[i][j] && squares2d[i][j] === squares2d[i-1][j+1] && squares2d[i][j] === squares2d[i-2][j+2] && 
         squares2d[i][j] === squares2d[i-3][j+3] &&squares2d[i][j] === squares2d[i-4][j+4]) {
           return {
             winner: squares2d[i][j],
@@ -29,7 +29,7 @@ function calculateWinner(squares, size) {
             isDraw: false
           }
       }
-      if (squares2d[i][j] && squares2d[i][j] === squares2d[i][j+1] && squares2d[i][j] === squares2d[i][j+2] && 
+      if (j+4<size && squares2d[i][j] && squares2d[i][j] === squares2d[i][j+1] && squares2d[i][j] === squares2d[i][j+2] && 
         squares2d[i][j] === squares2d[i][j+3] &&squares2d[i][j] === squares2d[i][j+4]) {
           return {
             winner: squares2d[i][j],
